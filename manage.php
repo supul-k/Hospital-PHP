@@ -61,7 +61,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         Change the status delete row
                     </h3>
                 </div>
-                <form method="post" style="display: flex; padding: 10px;" action="processEOI.php" id="change_status_form" novalidate="novalidate">
+                <form method="post" style="display: flex; padding: 10px;" action="processHospital.php" id="change_status_form" novalidate="novalidate">
                     <div style="padding: 10px;">
                         <!-- <label for="reference">Reference Number:</label> -->
                         <!-- <select id="reference" name="reference">

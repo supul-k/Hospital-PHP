@@ -3,8 +3,8 @@
 // Include settings.php to access database connection settings
 session_start();
 
-if (isset($_POST['submit_eoi_form'])) {
-    eoi_form_submission();
+if (isset($_POST['submit_patient_form'])) {
+    patient_form_submission();
 }
 
 if (isset($_POST['submit_delete_record'])) {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 
 
 
-function eoi_form_submission()
+function patient_form_submission()
 {
     session_start();
     require_once 'settings.php';
@@ -39,80 +39,60 @@ function eoi_form_submission()
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Check if the table already exists
 
-        $query = "SHOW TABLES LIKE 'eoi'";
+        $query = "SHOW TABLES LIKE 'patient'";
         $result = mysqli_query($conn, $query);
         $tableExists = mysqli_num_rows($result) > 0;
 
         if (!$tableExists) {
             // Table does not exist, create it
-            $sql = "CREATE TABLE eoi (
-            EOInumber int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            job_reference char(5) DEFAULT NULL,
+            $sql = "CREATE TABLE patient (
+            PatientNo int NOT NULL AUTO_INCREMENT PRIMARY KEY,
             first_name varchar(20) DEFAULT NULL,
             last_name varchar(20) DEFAULT NULL,
             date_of_birth date DEFAULT NULL,
             gender enum('Male','Female','Other') DEFAULT NULL,
-            street_address varchar(40) DEFAULT NULL,
-            suburb_town varchar(40) DEFAULT NULL,
-            state enum('VIC','NSW','QLD','NT','WA','SA','TAS','ACT') DEFAULT NULL,
-            postcode char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+            address varchar(40) DEFAULT NULL,
             email varchar(50) DEFAULT NULL,
             phone varchar(12) DEFAULT NULL,
-            skills varchar(255) DEFAULT NULL,
-            other_skills varchar(255) DEFAULT NULL,
-            status enum('New','Current','Final') DEFAULT NULL
+            disease varchar(255) DEFAULT NULL,
+            description varchar(255) DEFAULT NULL,
+            status enum('Admitted','Discharged') DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
         }
 
         if ($_POST['gender'] == 'male') {
-            $gen = 'male';
+            $gen = 'Male';
         } else if ($_POST['gender'] == 'female') {
-            $gen = 'female';
+            $gen = 'Female';
         } else {
             $gen = null;
         }
 
-        $html_css = isset($_POST['skill1']) ? 'HTML/CSS,' : '';
-        $javascript = isset($_POST['skill2']) ? 'JavaScript,' : '';
-        $python = isset($_POST['skill3']) ? 'Python,' : '';
-        $java = isset($_POST['skill4']) ? 'Programming Java,' : '';
-        $c_plus = isset($_POST['skill5']) ? 'Programming C+,' : '';
-        $sql = isset($_POST['skill6']) ? 'SQL,' : '';
-        $mongodb = isset($_POST['skill7']) ? 'MongoDB,' : '';
-        $other = isset($_POST['skill8']) ? $_POST['Other'] : '';
-
-        // concatenate all the checkbox values into a single string
-        $all_skills = $html_css . $javascript . $python . $java . $c_plus . $sql . $mongodb . $other;
-
-
-        // If there are no validation errors, insert the form data into the database
         // if (count($errors) === 0) {
-        $refNumber = mysqli_real_escape_string($conn, $_POST['refNumber']);
-        $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
-        $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+        $PatientNo = mysqli_real_escape_string($conn, $_POST['PatientNo']);
+        $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+        $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $dateofbirth = mysqli_real_escape_string($conn, $_POST['dateofbirth']);
+        $date_of_birth = mysqli_real_escape_string($conn, $_POST['date_of_birth']);
         $gender = mysqli_real_escape_string($conn, $gen);
-        $street_address = mysqli_real_escape_string($conn, $_POST['street_address']);
-        $suburb_town = mysqli_real_escape_string($conn, $_POST['suburb_town']);
-        $states = mysqli_real_escape_string($conn, $_POST['states']);
-        $postal_code = mysqli_real_escape_string($conn, $_POST['postal_code']);
-        $pnumber = mysqli_real_escape_string($conn, $_POST['pnumber']);
-        $skills = mysqli_real_escape_string($conn, $all_skills);
-        $otherskills = mysqli_real_escape_string($conn, $_POST['otherskills']);
+        $address = mysqli_real_escape_string($conn, $_POST['address']);
+        $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+        $disease = mysqli_real_escape_string($conn, $_POST['disease']);
+        $description = mysqli_real_escape_string($conn, $_POST['description']);
+        $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-        $sql = "INSERT INTO eoi (job_reference, first_name, last_name, email, date_of_birth, gender, street_address, suburb_town, state , postcode, phone, skills ,other_skills, status) 
-            VALUES ('$refNumber', '$firstname', '$lastname', '$email', '$dateofbirth', '$gender', '$street_address', '$suburb_town', '$states', '$postal_code', '$pnumber', '$skills' ,'$otherskills','New')";
+        $sql = "INSERT INTO eoi (PatientNo, first_name, last_name, email, date_of_birth, gender, address, phone, skills ,disease, description,  status) 
+            VALUES ('$PatientNo', '$first_name', '$last_name', '$email', '$date_of_birth', '$gender', '$address', '$phone', '$disease' ,'$otherskills', $description ,'$status')";
 
         if (mysqli_query($conn, $sql)) {
             // Set session variable with success message
-            $_SESSION['success_message'] = 'Record created successfully';
+            $_SESSION['success_message'] = 'Patient data added successfully';
         } else {
             // Set session variable with success message
             $_SESSION['error_message'] = 'Error Occured,  Check whether data submitted or not';
         }
 
-        header("Location: apply.php");
+        header("Location: patient_form.php");
     }
 }
 
@@ -199,30 +179,28 @@ function register()
     $result = mysqli_query($conn, $query);
     $tableExists = mysqli_num_rows($result) > 0;
 
-    if (!$tableExists) {
+    if ($tableExists == false) {
+        // Table does not exist, create it
         $sql = "CREATE TABLE registration (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL,
-            email VARCHAR(50) NOT NULL,
-            role varchar(10) DEFAULT NULL,
+            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            fname varchar(20) DEFAULT NULL,
+            lname varchar(20) DEFAULT NULL,
+            email varchar(20) DEFAULT NULL,
+            designation varchar(20) DEFAULT NULL,
             password VARCHAR(30) NOT NULL
-        )";
+        )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+
+        mysqli_query($conn, $sql);
+        $result = mysqli_query($conn, $sql);
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $name = $_POST["username_register"];
+        $fname = $_POST["fname"];
+        $lname = $_POST["lname"];
         $email = $_POST["email_register"];
+        $designation = $_POST["designation"];
         $password = $_POST["password"];
         $confirmPassword = $_POST['confirm-password'];
-
-        if ($_POST['role'] == 'admin') {
-            $role = 'admin';
-        } else if ($_POST['role'] == 'user') {
-            $role = 'user';
-        } else {
-            $role = null;
-        }
-
 
         // Validate form data
         if ($password !== $confirmPassword) {
@@ -233,16 +211,21 @@ function register()
         }
 
 
-        $sql = "INSERT INTO registration (name , email , role , password)
-                VALUES ('$name', '$email', '$role' , '$password')";
-    }
+        $sql = "INSERT INTO registration (fname , lname , email, designation , password)
+                VALUES ('$fname', '$lname', '$email', '$designation' , '$password')";
 
-    if (!mysqli_query($conn, $sql)) {
-        // Set session variable with success message
-        $_SESSION['error_message'] = 'Error Occured while Register';
+        if (mysqli_query($conn, $sql)) {
+            // Set session variable with success message
+            mysqli_close($conn);
+            $header('Location: login.php');
+        } else {
+            // Set session variable with success message
+            $_SESSION['error_message'] = 'Error Occured while Register';
+            header('Location: registration.php');
+        }
     }
-    mysqli_close($conn);
-    header('Location: login.php');
+    
+
 }
 
 function login()
@@ -264,26 +247,12 @@ function login()
 
         // Check if the query returned a row
         if (mysqli_num_rows($result) == 1) {
-            // Authentication succeeded, start a new session and redirect to the dashboard
-            while ($row = mysqli_fetch_assoc($result)) {
-                if ($row['role'] == 'admin') {
 
-                    session_regenerate_id();
-                    $_SESSION['loggedin'] = TRUE;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['role'] = $row['role'];
-                    header('Location: manage.php');
-                    exit();
-                } elseif ($row['role'] == 'user') {
-
-                    session_regenerate_id();
-                    $_SESSION['loggedin'] = TRUE;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['role'] = $row['role'];
-                    header('Location: index.php');
-                    exit();
-                }
-            }
+            session_regenerate_id();
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['email'] = $email;
+            header('Location: index.php');
+            exit();
         } else {
             // Authentication failed, display an error message
             $_SESSION['loginerror-message'] = 'Invalid Email or Password';

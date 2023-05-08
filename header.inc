@@ -17,7 +17,7 @@
 
 
   <!-- <script src="scripts/enhancements.js"></script> -->
-  <script src="scripts/apply.js"></script>
+  <script src="scripts/patient_form.js"></script>
 
   <title>Home</title>
 
