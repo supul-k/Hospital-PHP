@@ -14,7 +14,7 @@ if (isset($_SESSION['loginerror-message'])) {
 
 <body>
   <h1>Login Page</h1>
-  <form class="formLogin" style="max-width: 400px; width: 90%; margin: 0 auto;" method="POST" action="processEOI.php">
+  <form class="formLogin" style="max-width: 400px; width: 90%; margin: 0 auto;" method="POST" action="processHospital.php">
     <label for="email" class="labelRegistration ">Email:</label>
     <input class="inputRegistration" type="text" id="email" name="email_login" required>
 
