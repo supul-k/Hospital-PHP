@@ -53,6 +53,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <section class="contact-us">
         <div class="container">
             <h2>Contact Us</h2>
+            <div class="contact-description" style="text-align: center;">
+                <p>We value your feedback and inquiries. Please feel free to get in touch with us using the contact information below. Our team is ready to assist you.</p>
+            </div>
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fa fa-map-marker"></i>

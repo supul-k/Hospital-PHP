@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "root@15161";
+$username = "";   // add mysql username here to run
+$password = "";   // add mysql password here to run
 $dbname = "Hospital_CRUD";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);

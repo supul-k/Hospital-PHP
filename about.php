@@ -25,9 +25,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     }
 
     p {
+        text-align: center;
         font-size: 16px;
         line-height: 1.5;
-        color: #666;
+        color: black;
         margin-bottom: 20px;
     }
 </style>

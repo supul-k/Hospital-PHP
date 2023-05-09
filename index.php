@@ -12,15 +12,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
   <main>
     <section>
-      <h1 id="heading1">Welcome to Company</h1>
-      <p>Welcome to our innovative IT company! We specialize in providing cutting-edge software solutions to businesses across various industries, helping our clients increase their efficiency and productivity through innovative technology solutions.</p>
-      <p>At our company, we are committed to upholding our values of excellence, collaboration, and customer satisfaction. We offer a comprehensive benefits package that includes health, dental, and vision insurance, retirement plans, paid time off, and opportunities for professional development. We also provide a flexible work schedule and a supportive work environment.</p>
-      <p>Our commitment to employee growth and development is reflected in our training programs, mentorship, and leadership development initiatives. We encourage our employees to share their ideas and work together to find creative solutions for our clients.</p>
-      <p>Our company culture is characterized by a strong focus on innovation, collaboration, and customer satisfaction. We are proud to give back to our local communities through volunteerism and philanthropy. As a result of our dedication to excellence, we have been recognized as a leader in the IT industry, and our employees have received numerous awards and certifications for their contributions to the field.</p>
-
-      <p>
-        <a href="./jobs.php">View our current job openings</a>
-      </p>
+      <h1 id="heading1">Welcome to Our Hospital</h1>
+      <p>Welcome to our state-of-the-art hospital, where compassionate care and patient well-being are our top priorities. We are dedicated to providing the highest quality medical services to our community.</p>
+      <p>At our hospital, we have assembled a team of skilled healthcare professionals who are committed to delivering personalized care and treatment tailored to each patient's unique needs. Our doctors, nurses, and staff are experts in their fields and work collaboratively to ensure the best outcomes for our patients.</p>
+      <p>With cutting-edge medical technology and advanced facilities, we offer a wide range of specialized services including diagnostics, surgery, rehabilitation, and preventive care. Our aim is to not only treat illnesses but also promote overall wellness and disease prevention.</p>
+      <p>We understand that a hospital visit can be stressful, and our friendly and compassionate staff are here to support you every step of the way. We strive to create a comfortable and healing environment for our patients and their families.</p>
+      <p>As a community-focused hospital, we are deeply committed to serving our local area. We actively engage in community outreach programs, health education initiatives, and partnerships with other healthcare organizations to improve the well-being of our community.</p>
+      <p>We are honored to have the opportunity to care for you and your loved ones. Your health and satisfaction are our utmost priorities, and we are here to provide exceptional medical care and support during your journey to recovery and wellness.</p>
     </section>
   </main>
   <div class="imageSlider">
@@ -30,7 +28,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
     <div class="img-box">
       <img id="three" src="./images/image1.jpg">
-      <img id="two" src="./images/image2.jpeg">
+      <img id="two" src="./images/image2.jpg">
       <img id="one" src="./images/image3.jpg">
     </div>
     <div class="navRadio">
