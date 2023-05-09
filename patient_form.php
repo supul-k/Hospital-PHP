@@ -11,7 +11,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 <body>
     <article>
         <div>
-            <h1 id="heading1">Jobs Application</h1>
+            <h1 id="heading1">Patient Data</h1>
             <?php
             if (isset($_SESSION['success_message'])) {
                 // Display success message and unset the session variable
@@ -27,9 +27,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 unset($_SESSION['error_message']);
             }
             ?>
-
-
-            <p>You have <span id="timer">10:00</span> to complete the application.</p>
 
             <div class="container">
                 <form method="POST" id="regform" action="processHospital.php" novalidate="novalidate">
@@ -93,6 +90,15 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         <input type="text" id="disease" name="disease" placeholder="Disease" maxlength="20" size="20" required="required">
                     </div>
 
+                    <div >
+                        <label for="change_status">Status of the Patient:</label>
+                        <select id="change_status" name="change_status_hos">
+                            <option value="select status" selected disabled>select status</option>
+                            <option value="discharged">Discharged</option>
+                            <option value="admitted">Admitted</option>
+                        </select>
+                    </div>
+
                     <fieldset>
                         <label for="otherskill">Description about patient</label> <br>
                         <span id="otherskillError" class="error"></span>
@@ -100,7 +106,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
                     </fieldset>
                     <div class="applyButtonContainer">
-                        <input class="submitButton" type="button" onclick="validate()" value="submit" id="submit" name="submit_patient_form" style="background-color:#3498DB;
+                        <!-- <input class="submitButton" type="button" onclick="validate()" value="submit" id="submitPatientForm" name="submit_patient_form" style="background-color:#3498DB;
+  color: white;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;"> -->
+
+                        <input class="submitButton" type="submit" value="submit" id="submitPatientForm" name="submit_patient_form" style="background-color:#3498DB;
   color: white;
   padding: 14px 30px;
   border: none;

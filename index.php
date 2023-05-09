@@ -30,7 +30,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
     <div class="img-box">
       <img id="three" src="./images/image1.jpg">
-      <img id="two" src="./images/image2.jpg">
+      <img id="two" src="./images/image2.jpeg">
       <img id="one" src="./images/image3.jpg">
     </div>
     <div class="navRadio">

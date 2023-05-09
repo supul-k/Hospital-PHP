@@ -7,10 +7,6 @@ if (isset($_POST['submit_patient_form'])) {
     patient_form_submission();
 }
 
-if (isset($_POST['submit_delete_record'])) {
-    delete_specified_row();
-}
-
 if (isset($_POST['submit_change_status'])) {
     submit_change_status();
 }
@@ -22,6 +18,7 @@ if (isset($_POST['register'])) {
 if (isset($_POST['login'])) {
     login();
 }
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'log_out') {
     logout();
 }
@@ -47,29 +44,36 @@ function patient_form_submission()
             // Table does not exist, create it
             $sql = "CREATE TABLE patient (
             PatientNo int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            first_name varchar(20) DEFAULT NULL,
-            last_name varchar(20) DEFAULT NULL,
+            first_name varchar(40) DEFAULT NULL,
+            last_name varchar(40) DEFAULT NULL,
             date_of_birth date DEFAULT NULL,
             gender enum('Male','Female','Other') DEFAULT NULL,
-            address varchar(40) DEFAULT NULL,
+            address varchar(50) DEFAULT NULL,
             email varchar(50) DEFAULT NULL,
             phone varchar(12) DEFAULT NULL,
             disease varchar(255) DEFAULT NULL,
             description varchar(255) DEFAULT NULL,
             status enum('Admitted','Discharged') DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+
+            if (mysqli_query($conn, $sql)) {
+                // Insert successful
+            } else {
+                $_SESSION['error_message'] = 'Error occurred while creating table.';
+                header('Location: patient_form.php');
+                exit();
+            }
         }
 
-        if ($_POST['gender'] == 'male') {
+        if ($_POST['gender'] == 'Male') {
             $gen = 'Male';
-        } else if ($_POST['gender'] == 'female') {
+        } else if ($_POST['gender'] == 'Female') {
             $gen = 'Female';
         } else {
-            $gen = null;
+            $gen = 'Other';
         }
 
         // if (count($errors) === 0) {
-        $PatientNo = mysqli_real_escape_string($conn, $_POST['PatientNo']);
         $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
         $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -79,10 +83,10 @@ function patient_form_submission()
         $phone = mysqli_real_escape_string($conn, $_POST['phone']);
         $disease = mysqli_real_escape_string($conn, $_POST['disease']);
         $description = mysqli_real_escape_string($conn, $_POST['description']);
-        $status = mysqli_real_escape_string($conn, $_POST['status']);
+        $status = mysqli_real_escape_string($conn, $_POST['change_status_hos']);
 
-        $sql = "INSERT INTO eoi (PatientNo, first_name, last_name, email, date_of_birth, gender, address, phone, skills ,disease, description,  status) 
-            VALUES ('$PatientNo', '$first_name', '$last_name', '$email', '$date_of_birth', '$gender', '$address', '$phone', '$disease' ,'$otherskills', $description ,'$status')";
+        $sql = "INSERT INTO patient (first_name, last_name, email, date_of_birth, gender, address, phone ,disease, description,  status) 
+            VALUES ( '$first_name', '$last_name', '$email', '$date_of_birth', '$gender', '$address', '$phone', '$disease' , '$description' ,'$status')";
 
         if (mysqli_query($conn, $sql)) {
             // Set session variable with success message
@@ -141,17 +145,16 @@ function submit_change_status()
     session_start();
 
     // Check if the form was submitted
-    if (isset($_POST['reference']) && isset($_POST['change_status'])) {
+    if (isset($_POST['PatientNo']) && isset($_POST['change_status_hos'])) {
 
         // Get the EOInumber from the form input
-        $reference = $_POST['reference'];
-        $status = $_POST['change_status'];
+        $PatientNo = $_POST['PatientNo'];
+        $status = $_POST['change_status_hos'];
 
         // Construct the SQL query to delete the record based on the EOInumber
-        $sql = "UPDATE eoi SET status = '$status' WHERE job_reference = '$reference'";
+        $sql = "UPDATE patient SET status = '$status' WHERE PatientNo = '$PatientNo'";
 
         // Execute the SQL query
-        mysqli_query($conn, $sql);
         $result = mysqli_query($conn, $sql);
 
         if (!$result) {
@@ -163,14 +166,13 @@ function submit_change_status()
         }
 
         // Redirect the user to another page
-        header("Location: manage.php");
+        header("Location: Patient_details.php");
         exit();
     }
 }
 
 function register()
 {
-
     require_once 'settings.php';
     session_start();
 
@@ -183,18 +185,24 @@ function register()
         // Table does not exist, create it
         $sql = "CREATE TABLE registration (
             id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            fname varchar(20) DEFAULT NULL,
-            lname varchar(20) DEFAULT NULL,
-            email varchar(20) DEFAULT NULL,
-            designation varchar(20) DEFAULT NULL,
-            password VARCHAR(30) NOT NULL
-        )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+            fname varchar(50) DEFAULT NULL,
+            lname varchar(50) DEFAULT NULL,
+            email varchar(50) DEFAULT NULL,
+            designation varchar(40) DEFAULT NULL,
+            password VARCHAR(40) NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
-        mysqli_query($conn, $sql);
-        $result = mysqli_query($conn, $sql);
+        if (mysqli_query($conn, $sql)) {
+            // Insert successful
+        } else {
+            $_SESSION['error_message'] = 'Error occurred while creating table.';
+            header('Location: registration.php');
+            exit();
+        }
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
         $fname = $_POST["fname"];
         $lname = $_POST["lname"];
         $email = $_POST["email_register"];
@@ -202,30 +210,30 @@ function register()
         $password = $_POST["password"];
         $confirmPassword = $_POST['confirm-password'];
 
+        // die($confirmPassword);
+
         // Validate form data
         if ($password !== $confirmPassword) {
             $_SESSION['error_message'] = 'Passwords do not match. Please try again.';
-
             header('Location: registration.php');
             exit();
         }
 
-
-        $sql = "INSERT INTO registration (fname , lname , email, designation , password)
-                VALUES ('$fname', '$lname', '$email', '$designation' , '$password')";
+        $sql = "INSERT INTO registration (fname, lname, email, designation, password)
+                VALUES ('$fname', '$lname', '$email', '$designation', '$password')";
 
         if (mysqli_query($conn, $sql)) {
             // Set session variable with success message
             mysqli_close($conn);
-            $header('Location: login.php');
+            header('Location: login.php');
+            exit();
         } else {
-            // Set session variable with success message
-            $_SESSION['error_message'] = 'Error Occured while Register';
+            // Set session variable with error message
+            $_SESSION['error_message'] = 'Error occurred while registering.';
             header('Location: registration.php');
+            exit();
         }
     }
-    
-
 }
 
 function login()

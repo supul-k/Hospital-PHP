@@ -88,11 +88,13 @@ function validate() {
     result = false;
   }
 
+  result = true;
+
   console.log(result);
 
   if (result == true) {
     console.log("no error");
-    var myButton = document.getElementById("submit");
+    var myButton = document.getElementById("submitPatientForm");
 
     // Change the type attribute to "submit"
     myButton.setAttribute("type", "submit");
