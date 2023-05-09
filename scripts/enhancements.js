@@ -1,31 +1,60 @@
-window.addEventListener('load', startTimer, menulink);
-	/* startTimer();
-	showSlides();
-	menulink () */;
+window.addEventListener('load', function() {
+  startTimer();
+  startImageSlider();
+  menulink();
+});
 	
 	
 
-(function() {
-  var imgLen = document.getElementById('imgGallary');
-  var images = imgLen.getElementsByTagName('img');
-  var counter = 1;
+function startImageSlider() {
+  // Get the images and dots
+  const images = document.querySelectorAll('.img-box img');
+  const radioButtons = document.querySelectorAll('.radio');
 
-  if (counter <= images.length) {
-    setInterval(function() {
-      images[0].src = images[counter].src;
-      console.log(images[counter].src);
-      counter++;
+  // Set the current slide index
+  let currentSlideIndex = 0;
 
-      if (counter === images.length) {
-        counter = 1;
-      }
-    }, 4000);
+  // Function to show a slide by index
+  function showSlideByIndex(slideIndex) {
+    // Hide the current slide
+    images[currentSlideIndex].style.opacity = '0';
+
+    // Show the new slide
+    images[slideIndex].style.opacity = '1';
+
+    // Update the current slide index
+    currentSlideIndex = slideIndex;
+
+    // Update the checked state of the radio button corresponding to the new slide
+    document.getElementById(`img-${currentSlideIndex + 1}`).checked = true;
   }
-})();
 
+  // Function to show the next slide
+  function showNextSlide() {
+    // Get the next slide index
+    let nextSlideIndex = (currentSlideIndex + 1) % images.length;
 
+    // Show the next slide
+    showSlideByIndex(nextSlideIndex);
+  }
+
+  // Start the timer to change images every 4 seconds
+  setInterval(showNextSlide, 4000);
+
+  // Add event listeners to the radio buttons
+  radioButtons.forEach((radioButton, index) => {
+    radioButton.addEventListener('click', () => {
+      // Show the corresponding slide
+      showSlideByIndex(index);
+    });
+  });
+}
+
+// Start the slider
+startImageSlider();
 
 function menulink (){
+  
 
 var currentUrl = window.location.href;
 var menuLinks = document.getElementsByTagName("a");
@@ -62,3 +91,13 @@ function startTimer() {
     }
   }, 1000);
 }
+
+const menuToggle = document.getElementById("menu-toggle");
+const nav = document.querySelector("nav");
+
+menuToggle.addEventListener("click", function() {
+  nav.classList.toggle("open");
+});
+
+
+

@@ -1,6 +1,6 @@
 <footer id="footer1">
-    <p>© Swinburne University of Technology<br>
-        <a href="mailto:104336644@student.swin.edu.au">Send Email</a>
+    <p>© University Hospital KDU<br>
+        <a href="https://uhkdu.kdu.ac.lk/">Send Email</a>
     </p>
 </footer>
 </article>
