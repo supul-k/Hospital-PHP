@@ -19,6 +19,6 @@
   <!-- <script src="scripts/enhancements.js"></script> -->
   <script src="scripts/patient_form.js"></script>
 
-  <title>Home</title>
+  <title>Hospital</title>
 
 </head>

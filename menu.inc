@@ -25,7 +25,7 @@ include './header.inc';
       <a href="index.php">Home</a>
     </li>
     <li>
-      <a href="patient_form.php">Patient Details</a>
+      <a href="patient_form.php">Patient Form</a>
     </li>
     <li>
       <a href="Patient_details.php">Patient Details</a>

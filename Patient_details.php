@@ -35,14 +35,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 </div>
                 <form method="post" style="display: flex; padding: 10px;" action="processHospital.php" id="change_status_form" novalidate="novalidate">
                     <div style="padding: 10px;">
-                        <!-- <label for="reference">Reference Number:</label> -->
-                        <!-- <select id="reference" name="reference">
-                            <option value="select reference number" selected disabled>select reference number</option>
-                            <option value="011AA">Ref: 011AA</option>
-                            <option value="012BB">Ref: 012BB</option>
-                            <option value="013CC">Ref: 013CC</option>
-                            <option value="014DD">Ref: 014DD</option>
-                        </select> -->
                         <div id="firstname" style="padding: 10px;">
                             <label for="firstname">Patient Number</label><span id="fnameError" class="error"></span>
                             <input type="text" id="PatientNo" name="PatientNo" placeholder="Patient Number" maxlength="30" size="30">
@@ -88,7 +80,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         $result = mysqli_query($conn, $sql);
 
         if (!$result) {
-            die('Query failed: ' . mysqli_error($conn));
+            // die('Query failed: ' . mysqli_error($conn));
         }
 
 

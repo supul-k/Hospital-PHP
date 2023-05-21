@@ -254,7 +254,7 @@ function login()
         $result = mysqli_query($conn, $sql);
 
         // Check if the query returned a row
-        if (mysqli_num_rows($result) == 1) {
+        if (mysqli_num_rows($result)) {
 
             session_regenerate_id();
             $_SESSION['loggedin'] = TRUE;
